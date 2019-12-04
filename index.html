@@ -1,71 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Is It Sunday School This Week?</title>
-  <meta name="description" content="...">
-  <meta name="author" content="Jim Nielsen">
-</head>
+    <title>Is It Sunday School This Week?</title>
+    <meta name="description" content="..." />
+    <meta name="author" content="Jim Nielsen" />
+  </head>
 
-<body>
-<script>
-// https://stackoverflow.com/questions/1579010/get-next-date-from-weekday-in-javascript
-// @param {Number} x - day of week, i.e. 0-sunday, 1-monday, 2-tuesday...
-// @param {Date} d, the date
-function getNextDay(x, now){
-//     var now = new Date();  
-    now.setDate(now.getDate() + (x+(7-now.getDay())) % 7);
-    return now;
-}
-function getNextSunday(d) {
-  return getNextDay(0, d);
-}
-/* @param {number} year - calendar year
-** @param {number} month - calendar month: 1-Jan, 2-Feb, etc.
-** @param {number} dayNumber - day number: 0-Sunday, 1-Monday, etc.
-** @returns {Array} Dates for all days in month of dayNumber
-*/
-function getAllDaysInMonth(year, month, dayNumber) {
-  var d = new Date(year, month-1, 1);
+  <body>
+    <script>
+      // https://stackoverflow.com/questions/1579010/get-next-date-from-weekday-in-javascript
+      // @param {Number} x - day of week, i.e. 0-sunday, 1-monday, 2-tuesday...
+      // @param {Date} d, the date
+      function getNextDay(x, now) {
+        //     var now = new Date();
+        now.setDate(now.getDate() + ((x + (7 - now.getDay())) % 7));
+        return now;
+      }
+      function getNextSunday(d) {
+        return getNextDay(0, d);
+      }
+      /* @param {number} year - calendar year
+       ** @param {number} month - calendar month: 1-Jan, 2-Feb, etc.
+       ** @param {number} dayNumber - day number: 0-Sunday, 1-Monday, etc.
+       ** @returns {Array} Dates for all days in month of dayNumber
+       */
+      function getAllDaysInMonth(year, month, dayNumber) {
+        var d = new Date(year, month - 1, 1);
 
-  var dates = [];
-  var daysToFirst = (dayNumber + 7 - d.getDay()) % 7;
-  var firstOf = new Date( d.setDate(d.getDate() + daysToFirst));
-  
-  while (firstOf.getMonth() < month && firstOf.getFullYear() === year) {
-    dates.push(new Date(+firstOf));
-    firstOf.setDate(firstOf.getDate() + 7);
-  }
-  return dates;
-}
+        var dates = [];
+        var daysToFirst = (dayNumber + 7 - d.getDay()) % 7;
+        var firstOf = new Date(d.setDate(d.getDate() + daysToFirst));
 
+        while (firstOf.getMonth() < month && firstOf.getFullYear() === year) {
+          dates.push(new Date(+firstOf));
+          firstOf.setDate(firstOf.getDate() + 7);
+        }
+        return dates;
+      }
 
+      var nextSunday = getNextSunday(new Date());
+      var y = nextSunday.getFullYear();
+      var m = nextSunday.getMonth() + 1;
+      var d = nextSunday.getDay();
+      var sundaysInNextSundaysMonth = getAllDaysInMonth(y, m, d);
+      var index = sundaysInNextSundaysMonth.findIndex(
+        d => d.getDate() === nextSunday.getDate()
+      );
 
-var nextSunday = getNextSunday(new Date());
-var y = nextSunday.getFullYear();
-var m = nextSunday.getMonth() + 1;
-var d = nextSunday.getDay();
-var sundaysInNextSundaysMonth = getAllDaysInMonth(y, m, d);
-var index = sundaysInNextSundaysMonth.findIndex(d => d.getDate() === nextSunday.getDate());
+      if (index === 0 || index === 3) {
+        document.write("<h1>Yes.</h1>");
+      } else if (index === 1 || index === 3) {
+        document.write("<h1>Nope, it’s priesthood/relief society</h1>");
+      } else if (index === 5) {
+        document.write("<h1>Nope, it’s 5th Sunday. Bishop decides!</h1>");
+      } else {
+        document.write("I can’t tell you the answer to that questions.");
+      }
 
-if (index === 0 || index === 3) {
-  document.write("<h1>Yes.</h1>");
-} else if (index === 1 || index === 3) {
-  document.write("<h1>Nope, it’s priesthood/relief society</h1>");
-} else if (index === 5) {
-  document.write("<h1>Nope, it’s 5th Sunday. Bishop decides!</h1>")
-} else {
-  document.write("I can’t tell you the answer to that questions.")
-}
-
-document.write("<p>Source: <a href='https://canada.lds.org/sunday-2019-schedule-week-by-week-breakdown'>lds.org</a></p>")
-
-
-
-
-
-</script>
-</body>
+      // document.write("<p>Source: <a href='https://canada.lds.org/sunday-2019-schedule-week-by-week-breakdown'>lds.org</a></p>")
+    </script>
+  </body>
 </html>
